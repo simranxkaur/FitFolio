@@ -4,45 +4,68 @@ class LoginScreen extends Component {
   constructor() {
     super();
     this.state = {
-      showLogin: true,
-      showHelloMessage: false,
-      showAdditionalButtons: false,
+      username: '',
+      password: '',
+      loginError: '',
+      isLoggedIn: false,
+      showAdditionalButtons: false
     };
   }
 
   handleLoginClick = () => {
-    this.setState({
-      showLogin: false,
-      showHelloMessage: true,
-      showAdditionalButtons: true,
-    });
+    const { username, password } = this.state;
+
+    // Check if the provided username and password are correct
+    if (username === 'user' && password === 'password') {
+      this.setState({
+        isLoggedIn: true,
+        loginError: '',
+        showAdditionalButtons: true
+      });
+    } else {
+      this.setState({ loginError: 'Invalid credentials' });
+    }
+  };
+
+  handleUsernameChange = (e) => {
+    this.setState({ username: e.target.value });
+  };
+
+  handlePasswordChange = (e) => {
+    this.setState({ password: e.target.value });
   };
 
   render() {
     return (
       <div>
-        {this.state.showLogin && (
+        {!this.state.isLoggedIn && (
           <div>
             <h2>Login Form</h2>
             <input
-            type="text"
-            name="username"
-            placeholder="Username"
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={this.state.username}
+              onChange={this.handleUsernameChange}
             />
             <input
-            type="password"
-            name="password"
-            placeholder="Password"
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={this.state.password}
+              onChange={this.handlePasswordChange}
             />
             <button onClick={this.handleLoginClick}>Login</button>
+            {this.state.loginError && <p>{this.state.loginError}</p>}
           </div>
         )}
-        {this.state.showHelloMessage && (
+        {this.state.isLoggedIn && (
           <div>
             <h1>Hello, User! What would you like to do?</h1>
+            {/* Additional buttons and content for logged-in users */}
           </div>
         )}
-        {this.state.showAdditionalButtons && (
+         {this.state.showAdditionalButtons && (
           <div>
             <button> Design your workout split. </button>
             <button> Log your workouts. </button>

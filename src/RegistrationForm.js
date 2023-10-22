@@ -1,10 +1,10 @@
-// RegistrationForm.js
 import React, { Component } from 'react';
 
 class RegistrationForm extends Component {
   state = {
     username: '',
     password: '',
+    registrationMessage: '', // To display registration status
   };
 
   handleInputChange = (e) => {
@@ -12,7 +12,42 @@ class RegistrationForm extends Component {
   };
 
   handleRegistration = () => {
-    // You can handle the registration logic here, e.g., send the data to a server or store it in state.
+    // Extract registration data from state
+    const { username, password } = this.state;
+
+    // Prepare the registration data to send to the server
+    const registrationData = { username, password };
+
+    // Send a POST request to the server for registration
+    fetch('/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(registrationData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === 'Registration successful') {
+          // Registration was successful
+          this.setState({
+            registrationMessage: 'Registration successful',
+            username: '', // Clear input fields
+            password: '', // Clear input fields
+          });
+        } else {
+          // Handle registration failure
+          this.setState({
+            registrationMessage: 'Registration failed',
+          });
+        }
+      })
+      .catch((error) => {
+        console.error('Registration request failed:', error);
+        this.setState({
+          registrationMessage: 'Registration failed',
+        });
+      });
   };
 
   render() {
@@ -38,6 +73,7 @@ class RegistrationForm extends Component {
             Register
           </button>
         </form>
+        <p>{this.state.registrationMessage}</p>
       </div>
     );
   }
