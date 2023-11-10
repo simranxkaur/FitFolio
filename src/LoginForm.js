@@ -1,77 +1,76 @@
 import React, { Component } from 'react';
+import SplitCreation from './WorkoutPlanner';
 
-class LoginScreen extends Component {
+class LoginScreen extends Component 
+{
   constructor() {
     super();
     this.state = {
-      username: '',
-      password: '',
-      loginError: '',
-      isLoggedIn: false,
-      showAdditionalButtons: false
+      showLogin: true,
+      showHelloMessage: false,
+      showAdditionalButtons: false,
+      showSplit: false
     };
   }
 
   handleLoginClick = () => {
-    const { username, password } = this.state;
-
-    // Check if the provided username and password are correct
-    if (username === 'user' && password === 'password') {
-      this.setState({
-        isLoggedIn: true,
-        loginError: '',
-        showAdditionalButtons: true
-      });
-    } else {
-      this.setState({ loginError: 'Invalid credentials' });
-    }
+    this.setState({
+      showLogin: false,
+      showHelloMessage: true,
+      showAdditionalButtons: true,
+    });
   };
 
-  handleUsernameChange = (e) => {
-    this.setState({ username: e.target.value });
+  handleSplitClick = () => {
+    this.setState({
+      showSplit: true
+    });
   };
 
-  handlePasswordChange = (e) => {
-    this.setState({ password: e.target.value });
+  handleLogClick = () => {
+    this.setState({
+      showSplit: false
+    });
+  };
+
+  handleHistClick = () => {
+    this.setState({
+      showSplit: false
+    });
   };
 
   render() {
     return (
       <div>
-        {!this.state.isLoggedIn && (
+        {this.state.showLogin && (
           <div>
             <h2>Login Form</h2>
             <input
               type="text"
               name="username"
               placeholder="Username"
-              value={this.state.username}
-              onChange={this.handleUsernameChange}
             />
             <input
               type="password"
               name="password"
               placeholder="Password"
-              value={this.state.password}
-              onChange={this.handlePasswordChange}
             />
             <button onClick={this.handleLoginClick}>Login</button>
-            {this.state.loginError && <p>{this.state.loginError}</p>}
           </div>
         )}
-        {this.state.isLoggedIn && (
+        {this.state.showHelloMessage && (
           <div>
             <h1>Hello, User! What would you like to do?</h1>
-            {/* Additional buttons and content for logged-in users */}
           </div>
         )}
-         {this.state.showAdditionalButtons && (
+        {this.state.showAdditionalButtons && (
           <div>
-            <button> Design your workout split. </button>
-            <button> Log your workouts. </button>
-            <button> View your workout history. </button>
+            <button onClick={this.handleSplitClick}> Design your workout split. </button>
+            <button onClick={this.handleLogClick}> Log your workouts. </button>
+            <button onClick={this.handleHistClick}> View your workout history. </button>
           </div>
         )}
+        {this.state.showSplit && <SplitCreation/>}
       </div>
     );
   }
