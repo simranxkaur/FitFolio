@@ -1,13 +1,21 @@
 import logo from './logo.svg';
 import './App.css';
 import WorkoutPlanner from './WorkoutPlanner';
+import LogWorkouts from './LogWorkouts';
 import React, { useState } from 'react';
 
 function App() {
-  const [isSplitCreationVisible, setSplitCreationVisible] = useState(false);
+  const [visibleForms, setVisibleForms] = useState([]);
 
-  const handleButtonClick = () => {
-    setSplitCreationVisible(!isSplitCreationVisible); // Toggle the visibility
+  const handleButtonClick = (formType) => {
+    if (visibleForms.includes(formType)) {
+      // Hide the form if same form is clicked again
+      setVisibleForms([])
+    }
+    else {
+      // Add form to visible forms and hide all others
+      setVisibleForms([formType])
+    }
   };
 
   return (
@@ -18,12 +26,15 @@ function App() {
           Welcome to Fitfolio: An App to Track Your Progress in the Gym!
         </p>
         <div>
-          <button onClick={handleButtonClick}>
-            {isSplitCreationVisible ? 'Hide Workout Split Form' : 'Design your workout split'}
+          <button onClick={() => handleButtonClick('split')}>
+            {visibleForms.includes('split') ? 'Hide Workout Split Form' : 'Design your workout split'}
           </button>
-          <button> Log your workouts. </button>
+          <button onClick={() => handleButtonClick('log')}>
+            {visibleForms.includes('log') ? 'Hide Workout Log Form' : 'Log your workouts'}
+          </button>
           <button> View your workout history. </button>
-          {isSplitCreationVisible && <WorkoutPlanner />}
+          {visibleForms.includes('split') && <WorkoutPlanner />}
+          {visibleForms.includes('log') && <LogWorkouts />}
         </div>
       </header>
     </div>

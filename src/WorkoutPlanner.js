@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './WorkoutPlanner.css';
+import { useWorkoutContext } from './WorkoutContext';
 
 function WorkoutPlanner() {
+  const { workoutSplit, updateWorkoutSplit } = useWorkoutContext();
+
   const [splitName, setSplitName] = useState('');
   const [daysPerWeek, setDaysPerWeek] = useState(3);
   const [exercisesByDay, setExercisesByDay] = useState({});
@@ -49,6 +52,8 @@ function WorkoutPlanner() {
       setSplitName('');
       setDaysPerWeek(3); // Default to 3 days per week
       setExercisesByDay({});
+      
+      updateWorkoutSplit(newSplit);
     }
   };
 
@@ -63,6 +68,7 @@ function WorkoutPlanner() {
     localStorage.setItem('workoutSplit', JSON.stringify(splitList));
   }, [splitList]);
 
+  
   return (
     <div>
       <h2>Workout Split Planner</h2>
