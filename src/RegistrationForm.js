@@ -1,3 +1,4 @@
+//we could prolly delete this nonsense
 import React, { Component } from 'react';
 
 class RegistrationForm extends Component {

@@ -1,3 +1,5 @@
+//we can prolly delete this
+
 import React, { Component } from 'react';
 import SplitCreation from './WorkoutPlanner';
 
