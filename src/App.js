@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import logo from './logo.png';
 import './App.css';
 import WorkoutPlanner from './WorkoutPlanner';
 import LogWorkouts from './LogWorkouts';

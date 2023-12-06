@@ -119,10 +119,18 @@ function WorkoutHistory ()
             {
                 Object.entries(exercises).forEach(([exercise, details]) => {
                 console.log(`${exercise}: ${JSON.stringify(details)}`);
+
+                const formattedDetails = details.map(({ reps, weight }) => (
+                    <p key={`${exercise}-${reps}-${weight}`}>
+                      * Reps: {reps}, Weight: {weight}
+                    </p>
+                  ));
+
                 exerciseElements.push(
-                    <div key={exercise}>
-                    <p>{exercise}: {JSON.stringify(details)}</p>
-                    </div>
+                <div key={exercise}>
+                    <h4>{exercise}:</h4>
+                    {formattedDetails}
+                </div>
                 );
                 });
             }
