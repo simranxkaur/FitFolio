@@ -3,7 +3,7 @@ import './WorkoutPlanner.css';
 import { useWorkoutContext } from './WorkoutContext';
 
 function WorkoutPlanner() {
-  const { workoutSplit, updateWorkoutSplit } = useWorkoutContext();
+  const { workoutSplit, updateWorkoutSplit, setsData, updateSetsData } = useWorkoutContext();
 
   const [splitName, setSplitName] = useState('');
   const [daysPerWeek, setDaysPerWeek] = useState(3);
@@ -54,6 +54,19 @@ function WorkoutPlanner() {
       setExercisesByDay({});
       
       updateWorkoutSplit(newSplit);
+
+      // Initialize setsData based on the selected split
+      const newSetsData = {};
+      for (let dayIndex = 0; dayIndex < daysPerWeek; dayIndex++) {
+        const day = `Day ${dayIndex + 1}`;
+        newSetsData[day] = {};
+        (newSplit.exercisesByDay[day] || []).forEach((exercise) => {
+          newSetsData[day][exercise] = [{ weight: '', reps: '' }];
+        });
+      }
+
+      // Update setsData
+      updateSetsData(newSetsData);
     }
   };
 

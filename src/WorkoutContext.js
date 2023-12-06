@@ -1,42 +1,65 @@
-// This file is used to store and get the split information which can be accessed globally
-
-import { createContext, useContext, useState, useEffect } from 'react';
+// WorkoutContext.js
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const WorkoutContext = createContext();
 
 export const WorkoutProvider = ({ children }) => {
-  const [workoutSplit, setWorkoutSplit] = useState(() => {
-    // Try to get the workout split from local storage
-    const storedSplit = localStorage.getItem('workoutSplit');
-    return storedSplit ? JSON.parse(storedSplit) : null;
-  });
-
-  const [logWorkouts, setLogWorkouts] = useState(null);
-
-  const updateWorkoutSplit = (newSplit) => {
-    setWorkoutSplit(newSplit);
-    // Store the workout split in local storage
-    localStorage.setItem('workoutSplit', JSON.stringify(newSplit));
-  };
-
-  const updateLogWorkouts = (newLogWorkouts) => {
-    setLogWorkouts(newLogWorkouts);
-  };
+  const [workoutSplit, setWorkoutSplit] = useState(null);
+  const [logWorkouts, setLogWorkouts] = useState({});
+  const [weeklySessions, setWeeklySessions] = useState([]);
+  const [setsData, setSetsData] = useState({});
 
   useEffect(() => {
-    const storedLogWorkouts = localStorage.getItem('logWorkouts');
+    // Load data from local storage when the component mounts
+    const storedSplit = JSON.parse(localStorage.getItem('workoutSplit'));
+    const storedLogWorkouts = JSON.parse(localStorage.getItem('logWorkouts'));
+    const storedWeeklySessions = JSON.parse(localStorage.getItem('weeklySessions'));
+    
+    if (storedSplit) {
+      setWorkoutSplit(storedSplit);
+    }
+
     if (storedLogWorkouts) {
-      setLogWorkouts(JSON.parse(storedLogWorkouts));
+      setLogWorkouts(storedLogWorkouts);
+    }
+
+    if (storedWeeklySessions) {
+      setWeeklySessions(storedWeeklySessions);
     }
   }, []);
 
-  useEffect(() => {
-    // Store the log workouts in local storage
-    localStorage.setItem('logWorkouts', JSON.stringify(logWorkouts));
-  }, [logWorkouts]);
+  const updateWorkoutSplit = (newSplit) => {
+    setWorkoutSplit(newSplit);
+    localStorage.setItem('workoutSplit', JSON.stringify(newSplit));
+  };
+
+  const updateLogWorkouts = (newLog) => {
+    setLogWorkouts(newLog);
+    localStorage.setItem('logWorkouts', JSON.stringify(newLog));
+  };
+
+  const updateWeeklySessions = (newSessions) => {
+    setWeeklySessions(newSessions);
+    localStorage.setItem('weeklySessions', JSON.stringify(newSessions));
+  };
+
+  const updateSetsData = (newSetsData) => {
+    setSetsData(newSetsData);
+  };
 
   return (
-    <WorkoutContext.Provider value={{ workoutSplit, updateWorkoutSplit, logWorkouts, updateLogWorkouts}}>
+    <WorkoutContext.Provider
+      value={{
+        workoutSplit,
+        updateWorkoutSplit,
+        logWorkouts,
+        updateLogWorkouts,
+        weeklySessions,
+        updateWeeklySessions,
+        setsData,
+        updateSetsData,
+      }}
+    >
       {children}
     </WorkoutContext.Provider>
   );
